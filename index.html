@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d65d06'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#d65d06" />
+
+    <!-- SEO Meta Tags -->
+    <title>BENIN360 | Connecting the World to Benin - Digital Heritage & Visitor Platform</title>
+    <meta name="description" content="Discover Benin City and the Benin Kingdom. 10th Coronation Anniversary of the Oba of Benin, verified events, interactive GIS map, Oba's Palace, Igun Bronze casters, hotels, Edo cuisine, and tour guides." />
+    <meta name="keywords" content="Benin City, Oba of Benin, Coronation Anniversary, Benin Bronzes, Igun Street, Edo food, Banga soup, Nigeria tourism, Benin Moat, Patotec" />
+    <meta name="author" content="Patotec Software Solutions Ltd." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://benin360.ng/" />
+    <meta property="og:title" content="BENIN360 | Digital Heritage & Visitor Platform" />
+    <meta property="og:description" content="Connecting the World to Benin. Discover heritage sites, 10th Coronation events, hotels, authentic crafts, and tour guides." />
+    <meta property="og:image" content="/hero-benin-bronze.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BENIN360 | Connecting the World to Benin" />
+    <meta name="twitter:description" content="Digital visitor platform for Benin City: Coronation events, heritage map, hotels, and local guides." />
+    <meta name="twitter:image" content="/hero-benin-bronze.jpg" />
+
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristDestination",
+      "name": "Benin City & Benin Kingdom",
+      "description": "Historic cultural and monarchical capital in Edo State, Nigeria, famous for royal palaces, centuries-old lost-wax bronze casting, and ancient earthworks.",
+      "url": "https://benin360.ng/",
+      "provider": {
+        "@type": "Organization",
+        "name": "BENIN360 by Patotec Software Solutions Ltd.",
+        "url": "https://benin360.ng/"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Service worker registration
+      if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
