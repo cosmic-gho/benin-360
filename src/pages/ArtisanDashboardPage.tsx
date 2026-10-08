@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { formatNGN } from '@/lib/utils';
 import { VerificationBadge } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';
@@ -36,13 +35,12 @@ export function ArtisanDashboardPage({ user }: { user?: User | null }) {
     try {
       const [prods, ords] = await Promise.all([
         api.getProducts(),
-        Promise.resolve(store.getOrders()),
+        api.getOrders(),
       ]);
       setProducts(prods);
       setOrders(ords);
-    } catch {
-      setProducts(store.getProducts());
-      setOrders(store.getOrders());
+    } catch (err) {
+      console.error('Failed to load artisan data from backend:', err);
     } finally {
       setLoading(false);
     }
@@ -56,23 +54,21 @@ export function ArtisanDashboardPage({ user }: { user?: User | null }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const newCraft: Product = {
-        id: `prod-${Date.now()}`,
-        slug: craftForm.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') + `-${Date.now().toString().slice(-4)}`,
+      const slug = craftForm.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') + `-${Date.now().toString().slice(-4)}`;
+      const newCraft = {
+        slug,
         title: craftForm.title,
         category: craftForm.category,
         price_ngn: parseFloat(craftForm.price_ngn) || 45000,
         description: craftForm.description,
         vendor_name: craftForm.vendor_name,
-        image_url: craftForm.image_url || 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f',
+        image: craftForm.image_url || 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f',
         is_available: true,
         is_featured: true,
-        created_at: new Date().toISOString(),
       };
 
-      // Add to local store and reload
-      store.addProduct(newCraft);
-      setSuccessMsg(`Craft "${newCraft.title}" has been added to the BENIN360 Artisan Marketplace!`);
+      await api.createProduct(newCraft as any);
+      setSuccessMsg(`Craft "${newCraft.title}" has been published to the backend marketplace!`);
       setAddModalOpen(false);
       setCraftForm({
         title: '',
@@ -82,16 +78,23 @@ export function ArtisanDashboardPage({ user }: { user?: User | null }) {
         image_url: '',
         vendor_name: user?.first_name ? `${user.first_name} ${user.last_name || ''}` : 'Igun Street Master Guild',
       });
-      loadData();
+      await loadData();
       setTimeout(() => setSuccessMsg(null), 4000);
+    } catch (err: any) {
+      console.error('Failed to publish craft:', err);
+      alert('Unable to publish craft to server. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleUpdateOrderStatus = (id: string, status: MarketplaceOrder['status']) => {
-    store.updateOrderStatus(id, status);
-    setOrders(store.getOrders());
+  const handleUpdateOrderStatus = async (id: string, status: MarketplaceOrder['status']) => {
+    try {
+      await api.updateOrderStatus(id, status);
+      await loadData();
+    } catch (err) {
+      console.error('Failed to update order status:', err);
+    }
   };
 
   return (

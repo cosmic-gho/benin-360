@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { VerificationBadge } from '@/components/ui';
 import type { Guide, Experience, BookingRequest } from '@/types';
 
@@ -74,18 +73,9 @@ export function GuideDetailPage({ slug }: { slug: string }) {
         special_requests: bookingForm.special_requests,
       });
       setSubmittedBooking(res);
-    } catch {
-      const res = store.submitBooking({
-        experience_id: selectedExperience.id,
-        guide_id: guide.id,
-        visitor_name: bookingForm.visitor_name,
-        visitor_email: bookingForm.visitor_email,
-        visitor_phone: bookingForm.visitor_phone,
-        preferred_date: bookingForm.preferred_date,
-        party_size: bookingForm.party_size,
-        special_requests: bookingForm.special_requests,
-      });
-      setSubmittedBooking(res);
+    } catch (err: any) {
+      console.error('Failed to create booking on backend:', err);
+      alert('Unable to submit booking to server. Please try again.');
     } finally {
       setSubmitting(false);
     }

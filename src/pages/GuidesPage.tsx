@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Star, Clock, Phone, Mail, Languages, Award, Send, CheckCircle } from 'lucide-react';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Guide, Experience } from '@/types';
 import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
@@ -21,9 +20,8 @@ export function GuidesPage() {
         ]);
         setGuides(gList);
         setExperiences(eList);
-      } catch {
-        setGuides(store.getGuides());
-        setExperiences(store.getExperiences());
+      } catch (err) {
+        console.error('Failed to load guides from backend:', err);
       } finally {
         setLoading(false);
       }

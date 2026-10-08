@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { formatDate, formatTime } from '@/lib/utils';
 import { getGoogleCalendarUrl, downloadICalendarFile } from '@/lib/calendar';
 import { VerificationBadge } from '@/components/ui';

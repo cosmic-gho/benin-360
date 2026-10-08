@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 
 import { ImageUpload } from '@/components/ImageUpload';
 import type { Business, TransportRequest, User } from '@/types';
@@ -27,13 +26,12 @@ export function BusinessDashboardPage({ user }: { user?: User | null }) {
     try {
       const [bizList, trs] = await Promise.all([
         api.getBusinesses({ type: 'hotel' }),
-        Promise.resolve(store.getTransportRequests()),
+        api.getTransportRequests(),
       ]);
       setBusinesses(bizList);
       setTransportReqs(trs);
-    } catch {
-      setBusinesses(store.getBusinesses('hotel'));
-      setTransportReqs(store.getTransportRequests());
+    } catch (err) {
+      console.error('Failed to load business dashboard data from backend:', err);
     } finally {
       setLoading(false);
     }

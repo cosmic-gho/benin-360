@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Calendar, Clock, MapPin, ArrowLeft, Search, CalendarPlus, Navigation } from 'lucide-react';
+import { Calendar, Clock, MapPin, ArrowLeft, Search, CalendarPlus, Navigation, FileText, X, Download } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { formatDate, formatDateShort } from '@/lib/utils';
 import type { EventItem } from '@/types';
 import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
@@ -13,14 +12,15 @@ export function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'upcoming' | 'today' | 'past' | 'all'>('upcoming');
   const [search, setSearch] = useState('');
+  const [showFlyerModal, setShowFlyerModal] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const data = await api.getEvents();
         setEvents(data);
-      } catch {
-        setEvents(store.getEvents());
+      } catch (err) {
+        console.error('Failed to load events from backend:', err);
       } finally {
         setLoading(false);
       }
@@ -82,6 +82,14 @@ export function EventsPage() {
               Verified ceremonial calendar for the 10th Coronation Anniversary of the Oba of Benin, guild exhibitions, symposiums, and year-round cultural activities.
             </p>
           </div>
+
+          <button
+            onClick={() => setShowFlyerModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all shrink-0"
+          >
+            <FileText className="w-4 h-4" />
+            Official Programme Flyer
+          </button>
         </div>
 
 
@@ -182,6 +190,55 @@ export function EventsPage() {
                 </div>
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Official Programme Flyer Modal */}
+        {showFlyerModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+              <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100">
+                <div>
+                  <h3 className="font-bold text-gray-900 text-base sm:text-lg">
+                    Official 10th Coronation Programme
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    His Royal Majesty, Omo N'Oba N'Edo Uku Akpolokpolo, Ewuare II, CFR
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="/official-coronation-programme-2026.jpg"
+                    download="benin-coronation-programme-2026.jpg"
+                    className="p-2 rounded-xl text-gray-500 hover:text-primary-600 hover:bg-gray-100 transition-colors"
+                    title="Download flyer"
+                  >
+                    <Download className="w-5 h-5" />
+                  </a>
+                  <button
+                    onClick={() => setShowFlyerModal(false)}
+                    className="p-2 rounded-xl text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+              <div className="flex-1 overflow-auto p-4 bg-gray-50 flex items-center justify-center">
+                <img
+                  src="/official-coronation-programme-2026.jpg"
+                  alt="Official Coronation Programme 2026"
+                  className="max-w-full h-auto rounded-xl shadow-md border border-gray-200"
+                />
+              </div>
+              <div className="p-4 border-t border-gray-100 bg-white flex justify-end">
+                <button
+                  onClick={() => setShowFlyerModal(false)}
+                  className="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs sm:text-sm rounded-xl transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

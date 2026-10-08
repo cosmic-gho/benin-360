@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, UtensilsCrossed, MapPin, Info, Flame, Soup } from 'lucide-react';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Business } from '@/types';
 import { LoadingSpinner, EmptyState } from '@/components/ui';
@@ -25,8 +24,8 @@ export function FoodGuidePage() {
       try {
         const list = await api.getBusinesses({ type: 'restaurant' });
         setRestaurants(list);
-      } catch {
-        setRestaurants(store.getBusinesses('restaurant'));
+      } catch (err) {
+        console.error('Failed to load restaurants from backend:', err);
       } finally {
         setLoading(false);
       }

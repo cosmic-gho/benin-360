@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { formatDate } from '@/lib/utils';
 
 import type { PassportStamp, BookingRequest, TransportRequest, MarketplaceOrder, User as UserType } from '@/types';
@@ -24,19 +23,16 @@ export function VisitorDashboardPage({ user }: { user?: UserType | null }) {
     try {
       const [stampsList, bks, trs, ords] = await Promise.all([
         api.getPassportStamps(),
-        Promise.resolve(store.getBookings()),
-        Promise.resolve(store.getTransportRequests()),
-        Promise.resolve(store.getOrders()),
+        api.getBookings(),
+        api.getTransportRequests(),
+        api.getOrders(),
       ]);
       setStamps(stampsList);
       setBookings(bks);
       setTransports(trs);
       setOrders(ords);
-    } catch {
-      setStamps(store.getStamps());
-      setBookings(store.getBookings());
-      setTransports(store.getTransportRequests());
-      setOrders(store.getOrders());
+    } catch (err) {
+      console.error('Failed to load visitor dashboard data from backend:', err);
     } finally {
       setLoading(false);
     }

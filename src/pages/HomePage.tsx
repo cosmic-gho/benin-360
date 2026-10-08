@@ -4,7 +4,6 @@ import {
   ShoppingBag, Bus, MessageCircle, Stamp, ArrowRight, Star, Clock, Sparkles
 } from 'lucide-react';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import { formatDate, formatDateShort } from '@/lib/utils';
 import type { EventItem, Attraction, Business, Experience } from '@/types';
@@ -32,11 +31,8 @@ export function HomePage() {
         setAttractions(atData.slice(0, 4));
         setBusinesses(bzData.slice(0, 3));
         setExperiences(exData.slice(0, 3));
-      } catch {
-        setEvents(store.getEvents().slice(0, 3));
-        setAttractions(store.getAttractions().slice(0, 4));
-        setBusinesses(store.getBusinesses('hotel').slice(0, 3));
-        setExperiences(store.getExperiences().slice(0, 3));
+      } catch (err) {
+        console.error('Failed to load homepage data from backend:', err);
       } finally {
         setLoading(false);
       }

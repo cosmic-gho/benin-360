@@ -5,7 +5,6 @@ import {
   Cloud, Copy, ExternalLink, HardDrive, Check
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import { VerificationBadge } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';
@@ -15,15 +14,24 @@ import type { BookingRequest, TransportRequest, MarketplaceOrder, Attraction, Ev
 export function AdminDashboardPage() {
   const { navigate } = useRouter();
   const [activeTab, setActiveTab] = useState<'verification' | 'bookings' | 'transport' | 'orders' | 'storage'>('verification');
-  const [metrics, setMetrics] = useState<PlatformMetrics>(() => store.getMetrics());
+  const [metrics, setMetrics] = useState<PlatformMetrics>({
+    totalVisitors: 0,
+    totalEventViews: 0,
+    totalAttractionViews: 0,
+    totalEnquiries: 0,
+    totalBookings: 0,
+    totalPassportClaims: 0,
+    verifiedCount: 0,
+    pendingVerificationCount: 0,
+  });
 
   // Data lists
-  const [attractions, setAttractions] = useState<Attraction[]>(() => store.getAttractions());
-  const [events, setEvents] = useState<EventItem[]>(() => store.getEvents());
-  const [businesses, setBusinesses] = useState<Business[]>(() => store.getBusinesses());
-  const [bookings, setBookings] = useState<BookingRequest[]>(() => store.getBookings());
-  const [transportReqs, setTransportReqs] = useState<TransportRequest[]>(() => store.getTransportRequests());
-  const [orders, setOrders] = useState<MarketplaceOrder[]>(() => store.getOrders());
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [bookings, setBookings] = useState<BookingRequest[]>([]);
+  const [transportReqs, setTransportReqs] = useState<TransportRequest[]>([]);
+  const [orders, setOrders] = useState<MarketplaceOrder[]>([]);
 
   // Storage status & uploader
   const [storageStatus, setStorageStatus] = useState<StorageStatusResponse | null>(null);
@@ -35,50 +43,62 @@ export function AdminDashboardPage() {
 
   const refreshAll = useCallback(async () => {
     try {
-      const [m, a, e, b, s] = await Promise.all([
+      const [m, a, e, b, s, bk, tr, ord] = await Promise.all([
         api.getMetrics(),
         api.getAttractions(),
         api.getEvents(),
         api.getBusinesses(),
         api.getStorageStatus(),
+        api.getBookings(),
+        api.getTransportRequests(),
+        api.getOrders(),
       ]);
       setMetrics(m);
       setAttractions(a);
       setEvents(e);
       setBusinesses(b);
       setStorageStatus(s);
-    } catch {
-      setMetrics(store.getMetrics());
-      setAttractions(store.getAttractions());
-      setEvents(store.getEvents());
-      setBusinesses(store.getBusinesses());
+      setBookings(bk);
+      setTransportReqs(tr);
+      setOrders(ord);
+    } catch (err) {
+      console.error('Failed to load admin dashboard data from backend:', err);
     }
-    setBookings(store.getBookings());
-    setTransportReqs(store.getTransportRequests());
-    setOrders(store.getOrders());
   }, []);
 
   useEffect(() => {
     refreshAll();
   }, [refreshAll]);
 
-  const handleUpdateStatus = (
+  const handleUpdateStatus = async (
     type: 'attraction' | 'event' | 'business',
     id: string,
     status: 'verified' | 'pending' | 'unverified' | 'rejected'
   ) => {
-    store.updateVerification(type, id, status);
-    refreshAll();
+    try {
+      await api.updateVerification(type, id, status as 'verified' | 'rejected' | 'pending');
+      await refreshAll();
+    } catch (err) {
+      console.error('Failed to update verification status on backend:', err);
+    }
   };
 
-  const handleUpdateBookingStatus = (id: string, status: BookingRequest['status']) => {
-    store.updateBookingStatus(id, status);
-    refreshAll();
+  const handleUpdateBookingStatus = async (id: string, status: BookingRequest['status']) => {
+    try {
+      await api.updateBookingStatus(id, status);
+      await refreshAll();
+    } catch (err) {
+      console.error('Failed to update booking status on backend:', err);
+    }
   };
 
-  const handleUpdateTransportStatus = (id: string, status: TransportRequest['status']) => {
-    store.updateTransportStatus(id, status);
-    refreshAll();
+  const handleUpdateTransportStatus = async (id: string, status: TransportRequest['status']) => {
+    try {
+      await api.updateTransportStatus(id, status);
+      await refreshAll();
+    } catch (err) {
+      console.error('Failed to update transport status on backend:', err);
+    }
   };
 
   return (

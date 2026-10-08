@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { MapPin, ArrowLeft, Clock, Info, Navigation, Star, Crown, Landmark, Palette, Search } from 'lucide-react';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Attraction, Category } from '@/types';
 import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
@@ -23,9 +22,8 @@ export function AttractionsPage() {
         ]);
         setAttractions(attrList);
         setCategories(catList);
-      } catch {
-        setAttractions(store.getAttractions());
-        setCategories(store.getCategories());
+      } catch (err) {
+        console.error('Failed to load attractions from backend:', err);
       } finally {
         setLoading(false);
       }

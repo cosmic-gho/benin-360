@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { formatNGN } from '@/lib/utils';
 
 import type { BookingRequest, Experience, User } from '@/types';
@@ -22,13 +21,12 @@ export function GuideDashboardPage({ user }: { user?: User | null }) {
     try {
       const [exps, bks] = await Promise.all([
         api.getExperiences(),
-        Promise.resolve(store.getBookings()),
+        api.getBookings(),
       ]);
       setExperiences(exps);
       setBookings(bks);
-    } catch {
-      setExperiences(store.getExperiences());
-      setBookings(store.getBookings());
+    } catch (err) {
+      console.error('Failed to load guide dashboard data from backend:', err);
     } finally {
       setLoading(false);
     }
@@ -38,9 +36,13 @@ export function GuideDashboardPage({ user }: { user?: User | null }) {
     loadData();
   }, []);
 
-  const handleUpdateStatus = (id: string, status: BookingRequest['status']) => {
-    store.updateBookingStatus(id, status);
-    setBookings(store.getBookings());
+  const handleUpdateStatus = async (id: string, status: BookingRequest['status']) => {
+    try {
+      await api.updateBookingStatus(id, status);
+      await loadData();
+    } catch (err) {
+      console.error('Failed to update booking status:', err);
+    }
   };
 
   return (

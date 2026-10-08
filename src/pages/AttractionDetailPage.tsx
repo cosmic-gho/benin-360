@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { VerificationBadge } from '@/components/ui';
 import type { Attraction, Experience, EventItem } from '@/types';
 

@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { MapPin, ArrowLeft, Crown, Landmark, Palette, UtensilsCrossed, BedDouble, Calendar, ShoppingBag, Briefcase, X, Navigation } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import type { Attraction, EventItem, Business } from '@/types';
 import { VerificationBadge, LoadingSpinner } from '@/components/ui';
@@ -89,54 +88,8 @@ export function MapPage() {
         ];
 
         setPoints(allPoints);
-      } catch {
-        const attrList = store.getAttractions();
-        const eventList = store.getEvents();
-        const bizList = store.getBusinesses();
-
-        const allPoints: MapPoint[] = [
-          ...attrList
-            .filter((a) => a.latitude !== null && a.longitude !== null)
-            .map((a) => ({
-              id: a.id,
-              name: a.name,
-              type: 'attraction' as const,
-              subtype: a.category?.slug || 'royal-heritage',
-              latitude: a.latitude!,
-              longitude: a.longitude!,
-              category: a.category?.slug || 'royal-heritage',
-              image_url: a.image_url,
-              slug: a.slug,
-            })),
-          ...eventList
-            .filter((e) => e.latitude !== null && e.longitude !== null)
-            .map((e) => ({
-              id: e.id,
-              name: e.title,
-              type: 'event' as const,
-              subtype: 'events',
-              latitude: e.latitude!,
-              longitude: e.longitude!,
-              category: 'events',
-              image_url: e.cover_image,
-              slug: e.slug,
-            })),
-          ...bizList
-            .filter((b) => b.latitude !== null && b.longitude !== null)
-            .map((b) => ({
-              id: b.id,
-              name: b.name,
-              type: 'business' as const,
-              subtype: b.category?.slug || b.business_type,
-              latitude: b.latitude!,
-              longitude: b.longitude!,
-              category: b.category?.slug || (b.business_type === 'hotel' ? 'hotels' : 'food'),
-              image_url: b.image_url,
-              slug: b.slug,
-            })),
-        ];
-
-        setPoints(allPoints);
+      } catch (err) {
+        console.error('Failed to load map points from backend:', err);
       } finally {
         setLoading(false);
       }

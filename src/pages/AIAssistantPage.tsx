@@ -4,7 +4,6 @@ import {
   Compass, MapPin, Calendar, Utensils, Shield
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 
 interface Message {

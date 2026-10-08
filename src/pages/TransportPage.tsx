@@ -4,22 +4,23 @@ import {
   ShieldCheck, AlertCircle, ArrowLeft, ArrowRight, MapPin, Send
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import { VerificationBadge } from '@/components/ui';
 import type { TransportProvider, TransportRequest } from '@/types';
 
 export function TransportPage() {
   const { navigate } = useRouter();
-  const [providers, setProviders] = useState<TransportProvider[]>(() => store.getTransportProviders());
+  const [providers, setProviders] = useState<TransportProvider[]>([]);
 
   useEffect(() => {
-    api.getTransportProviders().then(setProviders).catch(() => {});
+    api.getTransportProviders().then(setProviders).catch((err) => {
+      console.error('Failed to load transport providers:', err);
+    });
   }, []);
 
   const [formData, setFormData] = useState({
     service_type: 'airport_transfer' as TransportRequest['service_type'],
-    provider_id: providers[0]?.id || '',
+    provider_id: '',
     pickup_location: '',
     destination: '',
     pickup_date: '',
@@ -41,20 +42,6 @@ export function TransportPage() {
     try {
       const newReq = await api.createTransportRequest({
         service_type: formData.service_type,
-        pickup_location: formData.pickup_location,
-        destination: formData.destination,
-        pickup_date: formData.pickup_date,
-        pickup_time: formData.pickup_time,
-        passengers: formData.passengers,
-        contact_name: formData.contact_name,
-        contact_phone: formData.contact_phone,
-        contact_email: formData.contact_email,
-        special_notes: formData.special_notes,
-      });
-      setSubmittedRequest(newReq);
-    } catch {
-      const fallbackReq = store.submitTransportRequest({
-        service_type: formData.service_type,
         provider_id: formData.provider_id || undefined,
         pickup_location: formData.pickup_location,
         destination: formData.destination,
@@ -66,7 +53,10 @@ export function TransportPage() {
         contact_email: formData.contact_email,
         special_notes: formData.special_notes,
       });
-      setSubmittedRequest(fallbackReq);
+      setSubmittedRequest(newReq);
+    } catch (err: any) {
+      console.error('Failed to submit transport request to backend:', err);
+      alert('Unable to submit transport request to server. Please try again.');
     } finally {
       setSubmitting(false);
     }

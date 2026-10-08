@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { MapPin, ArrowLeft, Phone, Mail, Globe, Search, BedDouble, UtensilsCrossed, Bus, ShoppingBag } from 'lucide-react';
 import { api } from '@/lib/api';
-import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Business } from '@/types';
 import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
@@ -28,8 +27,8 @@ export function BusinessDirectoryPage({ businessType }: { businessType: keyof ty
       try {
         const list = await api.getBusinesses({ type: businessType });
         setBusinesses(list);
-      } catch {
-        setBusinesses(store.getBusinesses(businessType));
+      } catch (err) {
+        console.error('Failed to load businesses from backend:', err);
       } finally {
         setLoading(false);
       }

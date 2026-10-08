@@ -4,23 +4,61 @@ import {
   ArrowLeft, ShieldCheck, MapPin, Calendar, Clock, Crown, Download
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import type { PassportStamp, PassportBadge, Attraction, EventItem } from '@/types';
 
+const PASSPORT_BADGES: PassportBadge[] = [
+  {
+    id: 'b-1',
+    slug: 'royal-pilgrim',
+    title: 'Royal Heritage Pilgrim',
+    description: 'Visited the sacred Palace of the Oba of Benin or Holy Aruosa Cathedral.',
+    icon: 'Crown',
+    requirementCount: 1,
+    category: 'royal-heritage'
+  },
+  {
+    id: 'b-2',
+    slug: 'bronze-master',
+    title: 'Bronze Master Trailblazer',
+    description: 'Walked the historic Igun Bronze Casters Guild Street.',
+    icon: 'Hammer',
+    requirementCount: 1,
+    category: 'culture'
+  },
+  {
+    id: 'b-3',
+    slug: 'coronation-witness',
+    title: 'Coronation Anniversary Witness',
+    description: 'Attended an official or verified 10th Coronation Anniversary festival event.',
+    icon: 'Sparkles',
+    requirementCount: 1,
+    category: 'events'
+  },
+  {
+    id: 'b-4',
+    slug: 'ancient-earthworks',
+    title: 'Ancient Earthworks Explorer',
+    description: 'Documented and stood before the historic Benin Moat or Ogiamien Palace.',
+    icon: 'Shield',
+    requirementCount: 1,
+    category: 'royal-heritage'
+  },
+];
+
 export function PassportPage() {
   const { navigate } = useRouter();
   const [visitorName, setVisitorName] = useState('Cultural Explorer');
-  const [stamps, setStamps] = useState<PassportStamp[]>(() => store.getStamps());
-  const badges = store.getBadges();
-  const [attractions, setAttractions] = useState<Attraction[]>(() => store.getAttractions());
-  const [events, setEvents] = useState<EventItem[]>(() => store.getEvents());
+  const [stamps, setStamps] = useState<PassportStamp[]>([]);
+  const badges = PASSPORT_BADGES;
+  const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
 
   useEffect(() => {
-    api.getPassportStamps().then(setStamps).catch(() => {});
-    api.getAttractions().then(setAttractions).catch(() => {});
-    api.getEvents().then(setEvents).catch(() => {});
+    api.getPassportStamps().then(setStamps).catch((err) => console.error('Stamps load error:', err));
+    api.getAttractions().then(setAttractions).catch((err) => console.error('Attractions load error:', err));
+    api.getEvents().then(setEvents).catch((err) => console.error('Events load error:', err));
   }, []);
 
   const [selectedTarget, setSelectedTarget] = useState('');
@@ -56,17 +94,9 @@ export function PassportPage() {
         const updated = await api.getPassportStamps();
         setStamps(updated);
       }
-    } catch {
-      const res = store.claimStamp({
-        visitor_name: visitorName,
-        stamp_type: type as 'attraction' | 'event',
-        target_id: id,
-        target_name: title,
-      });
-      setClaimMessage({ text: res.message, success: res.success });
-      if (res.success) {
-        setStamps(store.getStamps());
-      }
+    } catch (err: any) {
+      console.error('Failed to claim stamp on backend:', err);
+      setClaimMessage({ text: 'Unable to claim stamp on server. Please try again.', success: false });
     }
   };
 

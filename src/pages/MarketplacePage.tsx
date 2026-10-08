@@ -4,7 +4,6 @@ import {
   ShieldCheck, Sparkles, X, Heart
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
-import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import { formatNGN } from '@/lib/utils';
 
@@ -12,10 +11,12 @@ import type { Product, MarketplaceOrder } from '@/types';
 
 export function MarketplacePage() {
   const { navigate } = useRouter();
-  const [products, setProducts] = useState<Product[]>(() => store.getProducts());
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    api.getProducts().then(setProducts).catch(() => {});
+    api.getProducts().then(setProducts).catch((err) => {
+      console.error('Failed to load marketplace products from backend:', err);
+    });
   }, []);
 
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -67,17 +68,9 @@ export function MarketplacePage() {
         notes: orderForm.notes,
       });
       setSubmittedOrder(ord);
-    } catch {
-      const ord = store.submitOrder({
-        product_id: selectedProduct.id,
-        quantity: orderForm.quantity,
-        buyer_name: orderForm.buyer_name,
-        buyer_phone: orderForm.buyer_phone,
-        buyer_email: orderForm.buyer_email,
-        delivery_address: orderForm.delivery_address,
-        notes: orderForm.notes,
-      });
-      setSubmittedOrder(ord);
+    } catch (err: any) {
+      console.error('Failed to create order on backend:', err);
+      alert('Unable to place order to server. Please try again.');
     } finally {
       setOrdering(false);
     }
