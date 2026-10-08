@@ -7,7 +7,7 @@ import {
 import { useRouter } from '@/lib/router';
 import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
-import { VerificationBadge, DemoBanner } from '@/components/ui';
+import { VerificationBadge } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';
 import { formatDate } from '@/lib/utils';
 import type { BookingRequest, TransportRequest, MarketplaceOrder, Attraction, EventItem, Business, PlatformMetrics, StorageStatusResponse } from '@/types';
@@ -120,7 +120,7 @@ export function AdminDashboardPage() {
           <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
             <div className="text-xs text-gray-500 font-medium">Platform Visitors</div>
             <div className="text-xl font-extrabold text-gray-900 mt-1">{metrics.totalVisitors.toLocaleString()}</div>
-            <div className="text-[10px] text-emerald-600 font-semibold mt-1">+14% this week</div>
+            <div className="text-[10px] text-gray-400 font-medium mt-1">Platform visits</div>
           </div>
 
           <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">

@@ -63,7 +63,7 @@ export function getVerificationBadge(status: string): { label: string; color: st
     case 'rejected':
       return { label: 'Unverified', color: 'bg-error-100 text-error-700' };
     default:
-      return { label: 'Demo Data', color: 'bg-gray-100 text-gray-600' };
+      return { label: 'Unverified', color: 'bg-gray-100 text-gray-600' };
   }
 }
 

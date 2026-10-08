@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Attraction, Category } from '@/types';
-import { DemoBanner, VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
+import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
 
 export function AttractionsPage() {
   const { navigate } = useRouter();
@@ -89,9 +89,7 @@ export function AttractionsPage() {
           ))}
         </div>
 
-        <div className="mt-4">
-          <DemoBanner />
-        </div>
+
 
         {filtered.length === 0 ? (
           <EmptyState message="No attractions found. Try a different search or filter." />

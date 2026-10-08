@@ -7,7 +7,7 @@ import { useRouter } from '@/lib/router';
 import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
 import { formatNGN } from '@/lib/utils';
-import { DemoBanner } from '@/components/ui';
+
 import type { Product, MarketplaceOrder } from '@/types';
 
 export function MarketplacePage() {
@@ -110,7 +110,7 @@ export function MarketplacePage() {
           </div>
         </div>
 
-        <DemoBanner message="Product listings represent authentic Edo craft categories with verified guild vendors. Orders initiate direct artisan fulfillment with escrow payment integration ready." />
+
 
         {/* Search & Category Filter */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">

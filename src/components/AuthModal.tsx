@@ -14,7 +14,7 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthModalProps) {
-  const [tab, setTab] = useState<'switch' | 'login' | 'register'>('switch');
+  const [tab, setTab] = useState<'login' | 'register'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -38,76 +38,6 @@ export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthMo
   });
 
   if (!isOpen) return null;
-
-  // Preset quick-switch accounts
-  const DEMO_PERSONAS = [
-    {
-      role: 'guild_artisan' as UserRole,
-      title: 'Guild Artisan (Master Founder)',
-      name: 'Chief Nosakhare Igun',
-      username: 'artisan_igun',
-      password: 'artisan123',
-      icon: Hammer,
-      badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
-      description: 'Master of the historic Igun Street lost-wax bronze casting guild.',
-    },
-    {
-      role: 'business_operator' as UserRole,
-      title: 'Business Marketer (Hotel/Dining)',
-      name: 'Osas Erhabor',
-      username: 'hotel_manager',
-      password: 'hotel123',
-      icon: Building2,
-      badgeColor: 'bg-blue-100 text-blue-900 border-blue-300',
-      description: 'Manager of Protea Hotel Benin City Select in GRA.',
-    },
-    {
-      role: 'tour_guide' as UserRole,
-      title: 'Certified Heritage Guide',
-      name: 'Osaro Obasogie',
-      username: 'tour_guide_osaro',
-      password: 'guide123',
-      icon: Compass,
-      badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-      description: 'Senior royal protocol and Kingdom chronicles tour specialist.',
-    },
-    {
-      role: 'visitor' as UserRole,
-      title: 'Cultural Explorer / Tourist',
-      name: 'John Doe',
-      username: 'visitor_john',
-      password: 'visitor123',
-      icon: User,
-      badgeColor: 'bg-gray-100 text-gray-800 border-gray-300',
-      description: 'Diaspora visitor collecting passport stamps & exploring events.',
-    },
-    {
-      role: 'admin' as UserRole,
-      title: 'Platform Administrator',
-      name: 'Supervisor Console',
-      username: 'admin',
-      password: 'admin12345',
-      icon: ShieldCheck,
-      badgeColor: 'bg-primary-100 text-primary-900 border-primary-300',
-      description: 'Verifies listings, monitors audit logs, and oversees content.',
-    },
-  ];
-
-  const handleQuickLogin = async (username: string, pwd: string) => {
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-    try {
-      const res = await api.login({ username, password: pwd });
-      onUserChange(res.user);
-      setSuccess(`Logged in as ${res.user.first_name || res.user.username} (${res.user.role})`);
-      setTimeout(() => onClose(), 800);
-    } catch (err: any) {
-      setError(err?.message || 'Login failed. Ensure backend server is running.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -158,7 +88,7 @@ export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthMo
               <Sparkles className="w-4 h-4 text-primary-400" />
               <span className="text-xs uppercase tracking-wider text-primary-300 font-bold">BENIN360 Identity Portal</span>
             </div>
-            <h2 className="text-xl font-bold font-display mt-0.5">User Roles & Persona Access</h2>
+            <h2 className="text-xl font-bold font-display mt-0.5">Account Sign In & Registration</h2>
           </div>
           <button
             onClick={onClose}
@@ -211,14 +141,6 @@ export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthMo
         {/* Tab selection */}
         <div className="flex border-b border-gray-100 px-6 pt-3 gap-4 text-xs font-semibold">
           <button
-            onClick={() => setTab('switch')}
-            className={`pb-2.5 transition-colors border-b-2 ${
-              tab === 'switch' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            ⚡ Quick Role Switcher
-          </button>
-          <button
             onClick={() => setTab('login')}
             className={`pb-2.5 transition-colors border-b-2 ${
               tab === 'login' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -238,50 +160,6 @@ export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthMo
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto flex-1 space-y-4">
-          {tab === 'switch' && (
-            <div className="space-y-3">
-              <p className="text-xs text-gray-500 mb-2">
-                Click any persona below to immediately log in and preview how BENIN360 adapts permissions and features:
-              </p>
-              {DEMO_PERSONAS.map((p) => {
-                const isCurrent = currentUser?.username === p.username;
-                return (
-                  <button
-                    key={p.username}
-                    type="button"
-                    disabled={loading}
-                    onClick={() => handleQuickLogin(p.username, p.password)}
-                    className={`w-full p-3.5 rounded-2xl border text-left transition-all flex items-start justify-between gap-3 ${
-                      isCurrent
-                        ? 'border-primary-500 bg-primary-50/70 shadow-sm'
-                        : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50/60'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${p.badgeColor}`}>
-                        <p.icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-bold text-gray-900 text-sm">{p.name}</h4>
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border ${p.badgeColor}`}>
-                            {p.role.replace('_', ' ')}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-600 mt-0.5">{p.description}</p>
-                      </div>
-                    </div>
-                    {isCurrent && (
-                      <span className="shrink-0 text-xs font-bold text-primary-700 bg-primary-100 px-2.5 py-1 rounded-full">
-                        Active
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
           {tab === 'login' && (
             <form onSubmit={handleManualLogin} className="space-y-4">
               <div>
@@ -289,7 +167,7 @@ export function AuthModal({ isOpen, onClose, currentUser, onUserChange }: AuthMo
                 <input
                   type="text"
                   required
-                  placeholder="e.g. artisan_igun or user@example.com"
+                  placeholder="e.g. username or user@example.com"
                   value={loginForm.username}
                   onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                   className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary-500"

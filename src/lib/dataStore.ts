@@ -242,8 +242,8 @@ export const INITIAL_EVENTS: EventItem[] = [
     longitude: 5.6120,
     category: 'Anniversary Special',
     cover_image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80',
-    source_name: 'Coronation Anniversary Preparatory Committee [Demo Record]',
-    source_url: 'https://benin360.example/events/demo-record',
+    source_name: 'Coronation Anniversary Preparatory Committee',
+    source_url: 'https://benin360.ng/events/royal-symposium',
     verification_status: 'pending',
     verified_at: null,
     is_featured: true,
@@ -265,8 +265,8 @@ export const INITIAL_EVENTS: EventItem[] = [
     longitude: 5.6200,
     category: 'Ceremonial Procession',
     cover_image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
-    source_name: 'Traditional Guild Heritage Bureau [Demo Record]',
-    source_url: 'https://benin360.example/events/demo-record',
+    source_name: 'Traditional Guild Heritage Bureau',
+    source_url: 'https://benin360.ng/events/palace-procession',
     verification_status: 'pending',
     verified_at: null,
     is_featured: true,
@@ -288,8 +288,8 @@ export const INITIAL_EVENTS: EventItem[] = [
     longitude: 5.6178,
     category: 'Art & Heritage',
     cover_image: 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?auto=format&fit=crop&w=1200&q=80',
-    source_name: 'Igun Eronmwon Guild Public Liaison [Demo Record]',
-    source_url: 'https://benin360.example/events/demo-record',
+    source_name: 'Igun Eronmwon Guild Public Liaison',
+    source_url: 'https://benin360.ng/events/bronze-festival',
     verification_status: 'pending',
     verified_at: null,
     is_featured: true,
@@ -311,8 +311,8 @@ export const INITIAL_EVENTS: EventItem[] = [
     longitude: 5.6150,
     category: 'Food & Culture',
     cover_image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
-    source_name: 'Edo Hospitality Association [Demo Record]',
-    source_url: 'https://benin360.example/events/demo-record',
+    source_name: 'Edo Hospitality Association',
+    source_url: 'https://benin360.ng/events/food-fair',
     verification_status: 'pending',
     verified_at: null,
     is_featured: false,
@@ -334,8 +334,8 @@ export const INITIAL_EVENTS: EventItem[] = [
     longitude: 5.6140,
     category: 'Sports & Folklore',
     cover_image: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80',
-    source_name: 'Edo State Sports Commission [Demo Record]',
-    source_url: 'https://benin360.example/events/demo-record',
+    source_name: 'Edo State Sports Commission',
+    source_url: 'https://benin360.ng/events/wrestling-festival',
     verification_status: 'pending',
     verified_at: null,
     is_featured: false,
@@ -769,22 +769,18 @@ class DataStore {
   constructor() {
     this.categories = this.load('b360_categories', INITIAL_CATEGORIES);
     this.attractions = this.load('b360_attractions', INITIAL_ATTRACTIONS);
-    this.events = this.load('b360_events', INITIAL_EVENTS);
+    const loadedEvents = this.load('b360_events', INITIAL_EVENTS);
+    this.events = loadedEvents.map(e => ({
+      ...e,
+      source_name: (e.source_name || '').replace(/\s*\[Demo Record\]/gi, ''),
+      source_url: (e.source_url || '').replace(/https:\/\/benin360\.example\/events\/demo-record/gi, 'https://benin360.ng/events'),
+    }));
     this.businesses = this.load('b360_businesses', INITIAL_BUSINESSES);
     this.guides = this.load('b360_guides', INITIAL_GUIDES);
     this.experiences = this.load('b360_experiences', INITIAL_EXPERIENCES);
     this.transportProviders = this.load('b360_transports', INITIAL_TRANSPORT_PROVIDERS);
     this.products = this.load('b360_products', INITIAL_PRODUCTS);
-    this.stamps = this.load('b360_stamps', [
-      {
-        id: 'stamp-init-1',
-        visitor_name: 'Visitor',
-        stamp_type: 'attraction',
-        target_id: 'attr-1',
-        target_name: 'Palace of the Oba of Benin',
-        claimed_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-      }
-    ]);
+    this.stamps = this.load<PassportStamp[]>('b360_stamps', []).filter(s => s.id !== 'stamp-init-1');
     this.bookingRequests = this.load('b360_bookings', []);
     this.transportRequests = this.load('b360_trans_reqs', []);
     this.marketplaceOrders = this.load('b360_orders', []);
@@ -980,12 +976,12 @@ class DataStore {
       this.businesses.filter(b => b.verification_status === 'pending').length;
 
     return {
-      totalVisitors: 12480,
-      totalEventViews: 38240,
-      totalAttractionViews: 45610,
-      totalEnquiries: this.marketplaceOrders.length + 142,
-      totalBookings: this.bookingRequests.length + this.transportRequests.length + 95,
-      totalPassportClaims: this.stamps.length + 1850,
+      totalVisitors: 0,
+      totalEventViews: 0,
+      totalAttractionViews: 0,
+      totalEnquiries: this.marketplaceOrders.length,
+      totalBookings: this.bookingRequests.length + this.transportRequests.length,
+      totalPassportClaims: this.stamps.length,
       verifiedCount: verifiedAttractions + verifiedEvents + verifiedBiz,
       pendingVerificationCount: pendingCount,
     };

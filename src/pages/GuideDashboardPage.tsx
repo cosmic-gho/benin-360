@@ -7,7 +7,7 @@ import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { formatNGN } from '@/lib/utils';
-import { DemoBanner } from '@/components/ui';
+
 import type { BookingRequest, Experience, User } from '@/types';
 
 export function GuideDashboardPage({ user }: { user?: User | null }) {
@@ -88,14 +88,12 @@ export function GuideDashboardPage({ user }: { user?: User | null }) {
           </div>
         </div>
 
-        <DemoBanner message="Heritage Tour Guide Dispatch lets certified guides receive tour reservations from incoming diaspora visitors, manage walking trails, and review palace cultural protocols." />
-
         {/* Guide KPIs */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 mb-8">
           <div className="p-5 bg-white rounded-2xl border border-emerald-100 shadow-sm">
             <div className="text-xs font-semibold text-emerald-600 uppercase">Tours Guided</div>
-            <div className="text-2xl font-black text-stone-900 mt-1">84</div>
-            <div className="text-[11px] text-emerald-700 font-medium mt-1">100% 5-star ratings</div>
+            <div className="text-2xl font-black text-stone-900 mt-1">{bookings.filter(b => b.status === 'confirmed').length}</div>
+            <div className="text-[11px] text-emerald-700 font-medium mt-1">Confirmed tours</div>
           </div>
 
           <div className="p-5 bg-white rounded-2xl border border-emerald-100 shadow-sm">

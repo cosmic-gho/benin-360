@@ -7,7 +7,7 @@ import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { formatDate } from '@/lib/utils';
-import { DemoBanner } from '@/components/ui';
+
 import type { PassportStamp, BookingRequest, TransportRequest, MarketplaceOrder, User as UserType } from '@/types';
 
 export function VisitorDashboardPage({ user }: { user?: UserType | null }) {
@@ -100,7 +100,7 @@ export function VisitorDashboardPage({ user }: { user?: UserType | null }) {
           </div>
         </div>
 
-        <DemoBanner message="Visitor Portal tracks your collected digital heritage stamps, active guided tours, airport transfer dispatches, and authentic artisan marketplace orders in real-time." />
+
 
         {/* Visitor KPIs */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 mb-8">

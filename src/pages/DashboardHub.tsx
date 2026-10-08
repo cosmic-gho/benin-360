@@ -42,8 +42,8 @@ export function DashboardHub({ initialRole }: { initialRole?: UserRole }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="font-bold text-amber-300 uppercase tracking-wide">Role Switcher:</span>
-            <span className="text-stone-400 hidden sm:inline">Preview each stakeholder dashboard:</span>
+            <span className="font-bold text-amber-300 uppercase tracking-wide">Stakeholder Portals:</span>
+            <span className="text-stone-400 hidden sm:inline">Switch portal:</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">

@@ -6,7 +6,7 @@ import {
 import { useRouter } from '@/lib/router';
 import { store } from '@/lib/dataStore';
 import { api } from '@/lib/api';
-import { VerificationBadge, DemoBanner } from '@/components/ui';
+import { VerificationBadge } from '@/components/ui';
 import type { TransportProvider, TransportRequest } from '@/types';
 
 export function TransportPage() {
@@ -95,9 +95,7 @@ export function TransportPage() {
           </p>
         </div>
 
-        <div className="mt-6">
-          <DemoBanner message="Transport providers and booking requests are connected to the live admin dashboard. Payment gateways (Paystack/Flutterwave) will activate prior to public launch." />
-        </div>
+
 
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Booking Request Form */}

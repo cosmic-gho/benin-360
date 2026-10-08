@@ -7,7 +7,7 @@ import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { formatNGN } from '@/lib/utils';
-import { VerificationBadge, DemoBanner } from '@/components/ui';
+import { VerificationBadge } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';
 import type { Product, MarketplaceOrder, User } from '@/types';
 
@@ -147,8 +147,7 @@ export function ArtisanDashboardPage({ user }: { user?: User | null }) {
           </div>
         </div>
 
-        {/* Demo Notice */}
-        <DemoBanner message="Artisan Studio Portal connects registered guild masters directly to the global diaspora marketplace with escrow payments and authenticity tracking." />
+
 
         {successMsg && (
           <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm flex items-center gap-2 animate-fade-in">

@@ -5,7 +5,7 @@ import { useRouter } from '@/lib/router';
 import { store } from '@/lib/dataStore';
 import { formatDate, formatDateShort } from '@/lib/utils';
 import type { EventItem } from '@/types';
-import { DemoBanner, VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
+import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
 
 export function EventsPage() {
   const { navigate } = useRouter();
@@ -84,9 +84,7 @@ export function EventsPage() {
           </div>
         </div>
 
-        <div className="mt-6">
-          <DemoBanner message="Coronation anniversary dates and venues are curated from preliminary schedules. Verification badges indicate confirmed status with source citation." />
-        </div>
+
 
         {/* Filter and Search Bar */}
         <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center justify-between">

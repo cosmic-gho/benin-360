@@ -1,14 +1,7 @@
 import { AlertTriangle, Loader2, MapPin } from 'lucide-react';
 
-export function DemoBanner({ message }: { message?: string }) {
-  return (
-    <div className="bg-warning-50 border border-warning-200 rounded-lg px-4 py-3 flex items-start gap-2">
-      <AlertTriangle className="w-5 h-5 text-warning-600 shrink-0 mt-0.5" />
-      <p className="text-sm text-warning-800">
-        {message || 'This listing contains DEMO DATA. Details must be verified through official sources before relying on them.'}
-      </p>
-    </div>
-  );
+export function DemoBanner(_props?: { message?: string }) {
+  return null;
 }
 
 export function VerificationBadge({ status }: { status: string }) {
@@ -16,7 +9,7 @@ export function VerificationBadge({ status }: { status: string }) {
     verified: { label: 'Verified', color: 'bg-success-100 text-success-700' },
     pending: { label: 'Pending Review', color: 'bg-warning-100 text-warning-700' },
     rejected: { label: 'Unverified', color: 'bg-error-100 text-error-700' },
-    unverified: { label: 'Demo Data', color: 'bg-gray-100 text-gray-600' },
+    unverified: { label: 'Unverified', color: 'bg-gray-100 text-gray-600' },
   };
   const { label, color } = config[status] || config.unverified;
   return (

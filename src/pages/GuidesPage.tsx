@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Guide, Experience } from '@/types';
-import { DemoBanner, VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
+import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
 
 export function GuidesPage() {
   const { navigate } = useRouter();
@@ -44,9 +44,7 @@ export function GuidesPage() {
         <h1 className="font-display text-3xl sm:text-4xl font-bold text-gray-900">Tour Guides & Experiences</h1>
         <p className="mt-2 text-gray-500">Book local guides for heritage tours, cultural experiences and more</p>
 
-        <div className="mt-4">
-          <DemoBanner />
-        </div>
+
 
         {/* Guides */}
         <h2 className="font-display text-2xl font-bold text-gray-900 mt-8 mb-4">Meet Our Guides</h2>

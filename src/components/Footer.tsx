@@ -91,10 +91,8 @@ export function Footer() {
         {/* Disclaimer */}
         <div className="border-t border-gray-800 pt-8 space-y-4">
           <p className="text-xs text-gray-500 leading-relaxed max-w-3xl">
-            BENIN360 is an independent digital tourism platform. It is not affiliated with the Oba's Palace,
-            Coronation Anniversary Secretariat, or any government body unless an explicit partnership is confirmed.
-            Event and business information shown is clearly marked as DEMO DATA and must be verified through official
-            sources before publication. Powered by Patotec Software Solutions Ltd.
+            BENIN360 is an independent digital tourism platform connecting visitors to the heritage and culture of Benin Kingdom. It is not affiliated with the Oba's Palace,
+            Coronation Anniversary Secretariat, or any government body unless an explicit partnership is confirmed. Powered by Patotec Software Solutions Ltd.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500">

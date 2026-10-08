@@ -8,7 +8,7 @@ import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import { formatDate, formatDateShort } from '@/lib/utils';
 import type { EventItem, Attraction, Business, Experience } from '@/types';
-import { DemoBanner, VerificationBadge } from '@/components/ui';
+import { VerificationBadge } from '@/components/ui';
 
 export function HomePage() {
   const { navigate } = useRouter();
@@ -417,13 +417,6 @@ export function HomePage() {
             <Stamp className="w-5 h-5" />
             Start Your Passport
           </button>
-        </div>
-      </section>
-
-      {/* Disclaimer */}
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <DemoBanner message="All listings on this platform are currently DEMO DATA for demonstration purposes. No official affiliation with the Oba's Palace, Coronation Anniversary Secretariat, or any government body. Event details must be verified through official sources." />
         </div>
       </section>
     </div>

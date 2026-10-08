@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Business } from '@/types';
-import { DemoBanner, VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
+import { VerificationBadge, LoadingSpinner, EmptyState } from '@/components/ui';
 
 const businessTypeConfig = {
   hotel: { icon: BedDouble, label: 'Hotels', title: 'Hotels in Benin City', desc: 'Find accommodation for your stay' },
@@ -84,9 +84,7 @@ export function BusinessDirectoryPage({ businessType }: { businessType: keyof ty
           ) : null}
         </div>
 
-        <div className="mt-4">
-          <DemoBanner />
-        </div>
+
 
         {filtered.length === 0 ? (
           <EmptyState message={`No ${config.label.toLowerCase()} found. Try a different search.`} />

@@ -377,15 +377,16 @@ export const api = {
   async getMetrics(): Promise<PlatformMetrics> {
     try {
       const data = await fetchJson<any>('metrics/');
+      const fallback = store.getMetrics();
       return {
-        totalVisitors: data.total_visitors || 12480,
-        totalEventViews: data.total_event_views || 38240,
-        totalAttractionViews: data.total_attraction_views || 45610,
-        totalEnquiries: data.total_enquiries || 142,
-        totalBookings: data.total_bookings || 95,
-        totalPassportClaims: data.total_passport_claims || 1850,
-        verifiedCount: data.verified_count || 6,
-        pendingVerificationCount: data.pending_count || 2,
+        totalVisitors: data.total_visitors ?? fallback.totalVisitors,
+        totalEventViews: data.total_event_views ?? fallback.totalEventViews,
+        totalAttractionViews: data.total_attraction_views ?? fallback.totalAttractionViews,
+        totalEnquiries: data.total_enquiries ?? fallback.totalEnquiries,
+        totalBookings: data.total_bookings ?? fallback.totalBookings,
+        totalPassportClaims: data.total_passport_claims ?? fallback.totalPassportClaims,
+        verifiedCount: data.verified_count ?? fallback.verifiedCount,
+        pendingVerificationCount: data.pending_count ?? fallback.pendingVerificationCount,
       };
     } catch {
       return store.getMetrics();

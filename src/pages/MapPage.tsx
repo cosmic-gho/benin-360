@@ -302,12 +302,6 @@ export function MapPage() {
             </div>
           </div>
         )}
-
-        <div className="mt-4 bg-warning-50 border border-warning-200 rounded-lg px-4 py-3">
-          <p className="text-xs text-warning-800">
-            Map coordinates are DEMO DATA for illustration. Precise coordinates should be verified by administrators before publication.
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import {
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
-import { DemoBanner } from '@/components/ui';
+
 import { ImageUpload } from '@/components/ImageUpload';
 import type { Business, TransportRequest, User } from '@/types';
 
@@ -108,8 +108,6 @@ export function BusinessDashboardPage({ user }: { user?: User | null }) {
           </div>
         </div>
 
-        <DemoBanner message="Hospitality Marketer Dashboard allows certified hotel operators and restaurants to manage real-time availability, receive guest inquiries, and verify airport shuttles." />
-
         {updatedNotice && (
           <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm flex items-center gap-2 animate-fade-in">
             <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
@@ -120,21 +118,21 @@ export function BusinessDashboardPage({ user }: { user?: User | null }) {
         {/* Business KPIs */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8 mb-8">
           <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-            <div className="text-xs font-semibold text-slate-500 uppercase">Directory Views</div>
-            <div className="text-2xl font-black text-slate-900 mt-1">14,820</div>
-            <div className="text-[11px] text-blue-600 font-medium mt-1">+28% Coronation surge</div>
+            <div className="text-xs font-semibold text-slate-500 uppercase">Directory Listings</div>
+            <div className="text-2xl font-black text-slate-900 mt-1">{businesses.length}</div>
+            <div className="text-[11px] text-blue-600 font-medium mt-1">Verified listing</div>
           </div>
 
           <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="text-xs font-semibold text-slate-500 uppercase">Guest Inquiries</div>
-            <div className="text-2xl font-black text-blue-600 mt-1">{transportReqs.length + 8}</div>
-            <div className="text-[11px] text-emerald-600 font-semibold mt-1">Diaspora delegations</div>
+            <div className="text-2xl font-black text-blue-600 mt-1">{transportReqs.length}</div>
+            <div className="text-[11px] text-emerald-600 font-semibold mt-1">Guest inquiries & transfers</div>
           </div>
 
           <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="text-xs font-semibold text-slate-500 uppercase">Room Status</div>
             <div className="text-xl font-extrabold text-emerald-600 mt-1 capitalize">{hotelStatus.replace('_', ' ')}</div>
-            <div className="text-[11px] text-slate-400 font-medium mt-1">88% Occupancy rate</div>
+            <div className="text-[11px] text-slate-400 font-medium mt-1">Real-time status</div>
           </div>
 
           <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-sm">

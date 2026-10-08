@@ -6,7 +6,7 @@ import {
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
-import { VerificationBadge, DemoBanner } from '@/components/ui';
+import { VerificationBadge } from '@/components/ui';
 import type { Guide, Experience, BookingRequest } from '@/types';
 
 export function GuideDetailPage({ slug }: { slug: string }) {

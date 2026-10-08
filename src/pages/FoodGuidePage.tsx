@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import type { Business } from '@/types';
-import { DemoBanner, LoadingSpinner, EmptyState } from '@/components/ui';
+import { LoadingSpinner, EmptyState } from '@/components/ui';
 
 const edoDishes = [
   { name: 'Banga Rice', description: 'A rich, fragrant rice dish cooked in palm nut extract with fresh fish or meat. A beloved Edo specialty.', image: 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg' },
@@ -67,9 +67,7 @@ export function FoodGuidePage() {
               </div>
             ))}
           </div>
-          <div className="mt-3">
-            <DemoBanner message="Dish descriptions are general cultural knowledge for illustration. Restaurant listings are DEMO DATA." />
-          </div>
+
         </div>
 
         {/* Restaurants */}
