@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
+import { store } from '@/lib/dataStore';
 import { formatNGN } from '@/lib/utils';
 import { VerificationBadge, DemoBanner } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';

@@ -4,6 +4,7 @@ import {
   ShoppingBag, Bus, MessageCircle, Stamp, ArrowRight, Star, Clock, Sparkles
 } from 'lucide-react';
 import { api } from '@/lib/api';
+import { store } from '@/lib/dataStore';
 import { useRouter } from '@/lib/router';
 import { formatDate, formatDateShort } from '@/lib/utils';
 import type { EventItem, Attraction, Business, Experience } from '@/types';

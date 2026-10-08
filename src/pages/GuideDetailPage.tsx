@@ -4,6 +4,7 @@ import {
   Mail, Send, CheckCircle2, ShieldCheck, MapPin
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
+import { api } from '@/lib/api';
 import { store } from '@/lib/dataStore';
 import { VerificationBadge, DemoBanner } from '@/components/ui';
 import type { Guide, Experience, BookingRequest } from '@/types';
@@ -32,7 +33,7 @@ export function GuideDetailPage({ slug }: { slug: string }) {
       if (g) {
         setGuide(g);
         const allExps = await api.getExperiences();
-        const guideExps = allExps.filter(e => e.guide_id === g.id || (e as any).guide === g.id);
+        const guideExps = allExps.filter((e: Experience) => e.guide_id === g.id || (e as any).guide === g.id);
         setExperiences(guideExps);
         if (guideExps.length > 0) {
           setSelectedExperience(guideExps[0]);

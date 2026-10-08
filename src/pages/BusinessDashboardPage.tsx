@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import { api } from '@/lib/api';
+import { store } from '@/lib/dataStore';
 import { DemoBanner } from '@/components/ui';
 import { ImageUpload } from '@/components/ImageUpload';
 import type { Business, TransportRequest, User } from '@/types';
@@ -229,7 +230,9 @@ export function BusinessDashboardPage({ user }: { user?: User | null }) {
                 label="Property / Restaurant Image (Cloudflare R2)"
                 value={currentBiz.image_url || ''}
                 onChange={(url) => {
-                  setCurrentBiz({ ...currentBiz, image_url: url });
+                  if (businesses.length > 0) {
+                    setBusinesses([{ ...businesses[0], image_url: url }, ...businesses.slice(1)]);
+                  }
                   setUpdatedNotice('Property photo updated and saved to Cloudflare R2.');
                   setTimeout(() => setUpdatedNotice(null), 3500);
                 }}

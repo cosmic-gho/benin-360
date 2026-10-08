@@ -20,7 +20,7 @@ import type {
 } from '@/types';
 import { store } from './dataStore';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
+const BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://benin360-api.fly.dev/api/v1' : 'http://127.0.0.1:8000/api/v1');
 
 const TOKEN_KEY = 'benin360_auth_token';
 const USER_KEY = 'benin360_current_user';
@@ -37,7 +37,9 @@ export function setStoredToken(token: string | null) {
   try {
     if (token) localStorage.setItem(TOKEN_KEY, token);
     else localStorage.removeItem(TOKEN_KEY);
-  } catch {}
+  } catch (_e) {
+    // Ignore localStorage access failures (e.g. private browsing)
+  }
 }
 
 export function getStoredUser(): User | null {
@@ -53,21 +55,23 @@ export function setStoredUser(user: User | null) {
   try {
     if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
     else localStorage.removeItem(USER_KEY);
-  } catch {}
+  } catch (_e) {
+    // Ignore localStorage access failures
+  }
 }
 
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${BASE_URL.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
   const token = getStoredToken();
-  const authHeader = token ? { Authorization: `Token ${token}` } : {};
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Token ${token}` } : {}),
+    ...(options?.headers as Record<string, string> | undefined),
+  };
 
   const res = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...authHeader,
-      ...options?.headers,
-    },
     ...options,
+    headers,
   });
 
   if (!res.ok) {

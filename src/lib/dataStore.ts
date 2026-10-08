@@ -914,6 +914,20 @@ class DataStore {
     return newOrder;
   }
 
+  addProduct(product: Product) {
+    this.products.unshift(product);
+    this.save('b360_products', this.products);
+    return product;
+  }
+
+  updateOrderStatus(id: string, status: MarketplaceOrder['status']) {
+    const o = this.marketplaceOrders.find(ord => ord.id === id);
+    if (o) {
+      o.status = status;
+      this.save('b360_orders', this.marketplaceOrders);
+    }
+  }
+
   updateVerification(type: 'attraction' | 'event' | 'business', id: string, status: 'verified' | 'pending' | 'unverified' | 'rejected') {
     if (type === 'attraction') {
       const item = this.attractions.find(a => a.id === id);

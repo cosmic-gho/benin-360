@@ -7,6 +7,11 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+backend/venv
+backend/.env
+backend/db.sqlite3
+backend/staticfiles
+backend/media
 backend
 dist
 dist-ssr
